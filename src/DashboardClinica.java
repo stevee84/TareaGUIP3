@@ -1,5 +1,6 @@
 import javax.swing.*;
 import javax.swing.border.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.time.LocalDateTime;
@@ -34,7 +35,6 @@ public class DashboardClinica extends JFrame {
         setTitle("Sistema de Gestión de Pacientes");
         setSize(1500, 930);
         setMinimumSize(new Dimension(1200, 750));
-        setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         setLayout(new BorderLayout());
@@ -46,6 +46,10 @@ public class DashboardClinica extends JFrame {
         add(crearBarraEstado(), BorderLayout.SOUTH);
 
         iniciarReloj();
+
+        pack();
+        setLocationRelativeTo(null);
+        setVisible(true);
     }
 
     // =========================================================
@@ -140,7 +144,7 @@ public class DashboardClinica extends JFrame {
     private JPanel crearContenidoPrincipal() {
 
         JPanel principal = new JPanel(new BorderLayout());
-        principal.setBackground(COLOR_FONDO);
+        principal.setBackground(Color.BLACK);
 
         principal.add(crearHeader(), BorderLayout.NORTH);
 
@@ -349,7 +353,44 @@ public class DashboardClinica extends JFrame {
 
     private JPanel crearPanelTablaPacientes() {
         JPanel panel = new JPanel();
-        panel.add(new JLabel("Tabla de pacientes - pendiente "));
+        panel.setOpaque(false);
+        panel.setLayout(new BorderLayout());
+
+        JLabel lblPacientes = new JLabel("Pacientes");
+        lblPacientes.setForeground(COLOR_MENU);
+        lblPacientes.setFont(new Font("SansSerif", Font.BOLD, 13));
+        panel.add(lblPacientes, BorderLayout.NORTH);
+
+        //Datos Quemados
+        String[] columnas = {"ID", "Nombre", "Teléfono", "Edad"};
+        Object[][] datos = {
+                {1, "Scott Marchena", "48946167", 20},
+                {2, "Steven Moya", "65898945", 21},
+                {3, "Joshua Cabrera", "66349784", 20}
+        };
+
+        DefaultTableModel model = new DefaultTableModel(datos, columnas){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        JTable tablaPacientes = new JTable(model);
+        tablaPacientes.setRowHeight(30);
+        tablaPacientes.setFont(new Font("SansSerif", Font.PLAIN, 13));
+        tablaPacientes.setSelectionBackground(new Color(215, 240, 230));
+        tablaPacientes.setSelectionForeground(Color.BLACK);
+        tablaPacientes.setShowGrid(false);
+        tablaPacientes.setIntercellSpacing(new Dimension(0, 0));
+
+        JScrollPane scroll = new JScrollPane(tablaPacientes);
+
+        scroll.setOpaque(false);
+        scroll.getViewport().setOpaque(false);
+        scroll.setBorder(BorderFactory.createEmptyBorder());
+        panel.add(scroll, BorderLayout.CENTER);
+
         return panel;
     }
 
@@ -366,7 +407,6 @@ public class DashboardClinica extends JFrame {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             DashboardClinica ventana = new DashboardClinica();
-            ventana.setVisible(true);
         });
     }
 }

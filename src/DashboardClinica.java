@@ -159,7 +159,7 @@ public class DashboardClinica extends JFrame {
         filaSuperior.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         JPanel pnlTarjetas = crearPanelInicio();
-        pnlTarjetas.setPreferredSize(new Dimension(300, 220));
+        pnlTarjetas.setPreferredSize(new Dimension(280, 180));
         filaSuperior.add(pnlTarjetas, BorderLayout.WEST);
 
         JPanel pnlTabla = crearPanelTablaPacientes();
@@ -345,12 +345,64 @@ public class DashboardClinica extends JFrame {
 
 
     private JPanel crearPanelInicio() {
-        JPanel panel = new JPanel();
-        panel.add(new JLabel("Tarjetas - pendiente "));
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setOpaque(false);
+
+        JPanel pnlTarjetas = crearPanelTarjetas();
+        panel.add(pnlTarjetas, BorderLayout.CENTER);
+
         return panel;
     }
 
+    private JPanel crearPanelTarjetas() {
+        JPanel panel = new JPanel(new GridLayout(2, 2, 12, 12));
+        panel.setOpaque(false);
+        panel.setPreferredSize(new Dimension(280, 180));
 
+        panel.add(crearTarjetas("👤", "156", "Pacientes", COLOR_VERDE));
+        panel.add(crearTarjetas("📅", "12", "Citas hoy", COLOR_AZUL));
+        panel.add(crearTarjetas("🩺", "8", "Consultas", COLOR_NARANJA));
+        panel.add(crearTarjetas("❌", "3", "Canceladas", COLOR_ROJO));
+
+        JPanel wrapper = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        wrapper.setOpaque(false);
+        wrapper.add(panel);
+
+        return wrapper;
+    }
+
+    private JPanel crearTarjetas(String icono, String valor, String descripcion, Color color) {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBackground(Color.WHITE);
+        panel.setMaximumSize(new Dimension(160, 80));
+        panel.setBorder(new CompoundBorder(
+                new MatteBorder(0, 4, 0, 0, color),
+                new EmptyBorder(10, 12, 10, 12)
+        ));
+
+        JLabel lblicono = new JLabel(icono);
+        lblicono.setFont(new Font("SansSerif", Font.PLAIN, 18));
+        lblicono.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        JLabel lblValor = new JLabel(valor);
+        lblValor.setFont(new Font("SansSerif", Font.BOLD, 20));
+        lblValor.setForeground(color);
+        lblValor.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        JLabel lblDescripcion = new JLabel(descripcion);
+        lblDescripcion.setFont(new Font("SansSerif", Font.PLAIN, 11));
+        lblDescripcion.setForeground(Color.GRAY);
+        lblDescripcion.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        panel.add(lblicono);
+        panel.add(Box.createVerticalStrut(4));
+        panel.add(lblValor);
+        panel.add(Box.createVerticalStrut(1));
+        panel.add(lblDescripcion);
+
+        return panel;
+    }
     private JPanel crearPanelTablaPacientes() {
         JPanel panel = new JPanel();
         panel.setOpaque(false);
